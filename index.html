@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>Квестбук — прокачай себя</title>
+<style>
+:root{color-scheme:dark;--bg:#101010;--card:#191919;--card2:#232323;--line:#343434;--text:#f5f5f5;--muted:#a8a8a8;--lime:#d9ff62;--red:#ff9b9b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:920px;margin:auto;padding:24px 15px 60px}.hero{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--lime);font-weight:800;text-transform:uppercase}h1{font-size:clamp(34px,8vw,54px);letter-spacing:-2px;line-height:.98;margin:7px 0 10px}.muted{color:var(--muted)}h2{font-size:19px;margin:0 0 12px}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin:14px 0}.level{background:var(--lime);color:#111;border-radius:16px;padding:12px;text-align:center;min-width:78px}.level .n{font-size:27px;font-weight:900}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0}.stat{background:var(--card2);padding:12px;border-radius:14px}.stat strong{display:block;font-size:24px}.stat span{font-size:12px;color:var(--muted)}.bar{height:7px;background:#383838;border-radius:99px;overflow:hidden;margin-top:9px}.bar i{display:block;height:100%;background:var(--lime);width:0}.layout{display:grid;gap:14px}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1}button,input,select,textarea{font:inherit}button{border:0;border-radius:11px;padding:11px 13px;font-weight:800;background:var(--lime);color:#111;cursor:pointer}button.secondary{background:#303030;color:var(--text);border:1px solid #444}button.red{background:#482828;color:#ffd1d1}input,select,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid #444;background:#111;color:var(--text)}label{display:block;color:var(--muted);font-size:13px;margin:12px 0 5px}.quest{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid var(--line);padding:13px 0}.quest:last-child{border:0}.quest input{width:21px;height:21px;accent-color:var(--lime);margin-top:3px;flex:0 0 auto}.quest .body{flex:1}.quest.done .qt{text-decoration:line-through;color:var(--muted)}.qt{font-weight:800}.qd{font-size:14px;color:var(--muted);margin-top:3px}.xp{font-size:12px;color:var(--lime);white-space:nowrap}.tag{display:inline-block;border-radius:99px;background:#303030;padding:5px 9px;font-size:12px;color:#ddd}.skill{margin:12px 0}.skilltop{display:flex;justify-content:space-between;font-size:14px;gap:8px}.skillbar{height:6px;background:#383838;border-radius:99px;margin-top:6px;overflow:hidden}.skillbar i{display:block;height:100%;background:var(--lime)}.note{font-size:12px;color:var(--muted);line-height:1.5}.hidden{display:none!important}.empty{color:var(--muted);font-size:14px;padding:12px 0}.badge{color:var(--lime);font-size:12px;font-weight:800}.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:10px}@media(min-width:760px){.layout{grid-template-columns:1.15fr .85fr}.panel{margin:0}.stats{margin-top:20px}}
+</style>
+</head>
+<body><main>
+<header class="hero">
+ <div><div class="eyebrow">Персональная RPG · реальная жизнь</div><h1>КВЕСТБУК<span style="color:var(--lime)">.</span></h1><div class="muted">Главный персонаж — ты. Прокачивай себя, а не цифры.</div></div>
+ <div class="level"><div style="font-size:11px;font-weight:800">ТВОЙ УРОВЕНЬ</div><div class="n" id="level">1</div></div>
+</header>
+<div class="stats">
+ <div class="stat"><span>Опыт всего</span><strong id="totalxp">0</strong></div>
+ <div class="stat"><span>Квесты выполнены</span><strong id="donecount">0</strong></div>
+ <div class="stat"><span>Дней в игре</span><strong id="days">1</strong></div>
+</div>
+<section class="panel">
+ <div class="sectionhead"><strong id="progressText">Прогресс уровня</strong><span class="tag" id="progressNum">0 / 100 XP</span></div>
+ <div class="bar"><i id="progressBar"></i></div>
+ <p class="note">Каждые 100 XP — новый уровень. Опыт начисляется за реальные действия, не за идеальные планы.</p>
+</section>
+<div class="layout">
+ <div>
+  <section class="panel">
+   <div class="sectionhead"><h2>Квесты на сегодня</h2><span class="tag" id="todayCount">0 квестов</span></div>
+   <div id="quests"></div>
+   <div class="row" style="margin-top:14px"><button id="addQuest">＋ Добавить квест</button><button class="secondary" id="newDay">Новый день</button></div>
+  </section>
+  <section class="panel">
+   <h2>Добавить свой квест</h2>
+   <label for="questTitle">Что сделаешь?</label><input id="questTitle" maxlength="100" placeholder="Например: смонтировать 20 секунд видео">
+   <label for="questDesc">Как поймёшь, что выполнил?</label><textarea id="questDesc" rows="2" maxlength="240" placeholder="Конкретный результат, который можно проверить"></textarea>
+   <div class="row"><div><label for="questXp">Награда XP</label><select id="questXp"><option value="10">10 — легко</option><option value="20" selected>20 — обычно</option><option value="30">30 — непросто</option><option value="50">50 — босс-квест</option></select></div><div><label for="questCat">Характеристика</label><select id="questCat"><option>Дисциплина</option><option>Тело</option><option>Создание</option><option>Общение</option><option>Знания</option><option>Быт</option></select></div></div>
+   <button id="saveQuest" style="width:100%;margin-top:14px">Добавить в квестбук</button>
+  </section>
+ </div>
+ <div>
+  <section class="panel">
+   <h2>Характеристики персонажа</h2><p class="note">Растут, когда ты выполняешь квесты соответствующего типа.</p><div id="skills"></div>
+  </section>
+  <section class="panel">
+   <h2>Летопись</h2><div id="history" class="empty">Здесь будут твои выполненные квесты.</div>
+   <button id="export" class="secondary" style="width:100%;margin-top:12px">Экспортировать сохранение</button>
+   <button id="importBtn" class="secondary" style="width:100%;margin-top:8px">Импортировать сохранение</button><input id="file" class="hidden" type="file" accept=".json,application/json">
+   <p class="note" id="status" aria-live="polite">Данные хранятся локально в этом браузере. Для переноса между устройствами используй экспорт/импорт.</p>
+  </section>
+  <section class="panel">
+   <h2>Правила игры</h2><p class="note">1. Персонаж — это ты в реальной жизни.<br>2. Квест должен описывать действие, а не абстрактное желание.<br>3. Не штрафуй себя за пропуски: просто возвращайся в игру.<br>4. Маленький честный шаг лучше идеального плана.</p>
+   <button id="reset" class="red" style="width:100%;margin-top:10px">Сбросить прогресс</button>
+  </section>
+ </div>
+</div>
+<p class="note" style="margin-top:20px">Квестбук · локальная версия · без аккаунта, сервера и ИИ.</p>
+</main>
+<script>
+const KEY='questbook_self_rpg_v2';
+const $=id=>document.getElementById(id);
+const iso=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const initial=()=>({xp:0,doneCount:0,days:1,lastDay:iso(),quests:[],history:[],skills:{'Дисциплина':0,'Тело':0,'Создание':0,'Общение':0,'Знания':0,'Быт':0}});
+let s;try{s=JSON.parse(localStorage.getItem(KEY))||initial()}catch(e){s=initial()}
+s={...initial(),...s,skills:{...initial().skills,...(s.skills||{})},quests:s.quests||[],history:s.history||[]};
+function persist(){localStorage.setItem(KEY,JSON.stringify(s))}
+function maybeNewDate(){let n=iso();if(s.lastDay!==n){s.days+=1;s.lastDay=n;s.quests=(s.quests||[]).filter(q=>!q.done);persist()}}
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ let lv=Math.floor(s.xp/100)+1,part=s.xp%100;$('level').textContent=lv;$('totalxp').textContent=s.xp;$('donecount').textContent=s.doneCount;$('days').textContent=s.days;
+ $('progressNum').textContent=part+' / 100 XP';$('progressBar').style.width=part+'%';$('todayCount').textContent=s.quests.length+' квестов';
+ const q=$('quests');q.innerHTML='';
+ if(!s.quests.length)q.innerHTML='<div class="empty">Пока пусто. Добавь свой первый квест — небольшой и конкретный.</div>';
+ s.quests.forEach(item=>{
+  const el=document.createElement('div');el.className='quest'+(item.done?' done':'');
+  const cb=document.createElement('input');cb.type='checkbox';cb.checked=!!item.done;cb.setAttribute('aria-label','Отметить квест выполненным');
+  cb.onchange=()=>toggle(item.id,cb.checked);
+  const body=document.createElement('div');body.className='body';
+  body.innerHTML='<div class="qt">'+escapeHtml(item.title)+'</div><div class="qd">'+escapeHtml(item.desc||'')+'</div><div class="note" style="margin-top:5px">'+escapeHtml(item.cat||'Дисциплина')+'</div>';
+  const xp=document.createElement('div');xp.className='xp';xp.textContent='+'+item.xp+' XP';
+  el.append(cb,body,xp);q.append(el)
+ });
+ const skill=$('skills');skill.innerHTML='';
+ Object.entries(s.skills).forEach(([name,value])=>{let percent=Math.min(100,value%100);let lv=Math.floor(value/100)+1;const el=document.createElement('div');el.className='skill';el.innerHTML='<div class="skilltop"><span>'+escapeHtml(name)+' · ур. '+lv+'</span><span>'+value+' XP</span></div><div class="skillbar"><i style="width:'+percent+'%"></i></div>';skill.append(el)});
+ const hist=$('history');if(!s.history.length){hist.className='empty';hist.textContent='Здесь будут твои выполненные квесты.'}else{hist.className='';hist.innerHTML=s.history.slice(0,12).map(h=>'<div style="padding:9px 0;border-bottom:1px solid var(--line)"><div style="font-weight:700">'+escapeHtml(h.title)+'</div><div class="note">'+escapeHtml(h.date)+' · +'+h.xp+' XP</div></div>').join('')}
+}
+function toggle(id,done){const q=s.quests.find(x=>x.id===id);if(!q||q.done===done)return;q.done=done;if(done){s.xp+=q.xp;s.doneCount++;s.skills[q.cat]=(s.skills[q.cat]||0)+q.xp;s.history.unshift({title:q.title,date:iso(),xp:q.xp,cat:q.cat});}else{s.xp=Math.max(0,s.xp-q.xp);s.doneCount=Math.max(0,s.doneCount-1);s.skills[q.cat]=Math.max(0,(s.skills[q.cat]||0)-q.xp);const idx=s.history.findIndex(h=>h.title===q.title&&h.date===iso()&&h.xp===q.xp);if(idx>=0)s.history.splice(idx,1)}persist();render()}
+function addQuest(){let title=$('questTitle').value.trim();if(!title){$('questTitle').focus();return}let cat=$('questCat').value;s.quests.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),title,desc:$('questDesc').value.trim(),xp:Number($('questXp').value),cat,done:false});$('questTitle').value='';$('questDesc').value='';persist();render();$('status').textContent='Квест добавлен. Теперь сделай реальный шаг.'}
+$('addQuest').onclick=()=>{$('questTitle').focus();$('questTitle').scrollIntoView({behavior:'smooth',block:'center'})};
+$('saveQuest').onclick=addQuest;
+$('newDay').onclick=()=>{if(confirm('Начать новый день? Незавершённые квесты будут удалены, прогресс сохранится.')){s.quests=s.quests.filter(q=>q.done);s.lastDay=iso();persist();render()}};
+$('export').onclick=()=>{const blob=new Blob([JSON.stringify(s,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='questbook-save.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('status').textContent='Сохранение экспортировано. Перенеси JSON-файл на другое устройство и импортируй его там.'};
+$('importBtn').onclick=()=>$('file').click();
+$('file').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let data=JSON.parse(await f.text());if(typeof data.xp!=='number'||!Array.isArray(data.quests))throw Error();s={...initial(),...data,skills:{...initial().skills,...(data.skills||{})}};persist();render();$('status').textContent='Сохранение импортировано.'}catch(err){$('status').textContent='Не получилось прочитать файл сохранения.'}e.target.value=''};
+$('reset').onclick=()=>{if(confirm('Удалить весь прогресс и историю? Это нельзя отменить, если нет резервной копии.')){s=initial();persist();render();$('status').textContent='Прогресс сброшен.'}};
+maybeNewDate();persist();render();
+</script></body></html>
