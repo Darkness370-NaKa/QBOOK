@@ -358,15 +358,41 @@ async function qbookReadImportFile(file){
  const ext=(file.name.split('.').pop()||'').toLowerCase();
  if(ext==='txt'||ext==='html'||ext==='htm'||ext==='csv'||ext==='json')return await file.text();
  if(ext==='docx'){
-  if(!window.mammoth){await qbookLoadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js');}
+  if(!window.mammoth)await qbookLoadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js');
   const result=await window.mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()});return result.value;
  }
  if(ext==='pdf'){
-  if(!window.pdfjsLib){await qbookLoadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');}
+  if(!window.pdfjsLib)await qbookLoadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
   window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  const pdf=await window.pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;let pages=[];
-  for(let n=1;n<=pdf.numPages;n++){const p=await pdf.getPage(n),c=await p.getTextContent();pages.push(c.items.map(x=>x.str).join(' '));}
-  const text=pages.join('\n');if(!text.trim())throw new Error('В PDF нет текстового слоя. Нужен PDF с распознаваемым текстом (OCR).');return text;
+  const pdf=await window.pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
+  if(pdf.numPages>80)throw new Error('В PDF больше 80 страниц. Раздели его на части и загрузи отдельно.');
+  const pages=[];
+  for(let n=1;n<=pdf.numPages;n++){
+   const page=await pdf.getPage(n),content=await page.getTextContent();
+   const items=content.items.filter(x=>x.str&&x.str.trim()).map(x=>({text:x.str.trim(),x:x.transform?.[4]||0,y:x.transform?.[5]||0}));
+   let lines=[];
+   if(items.length){
+    items.sort((a,b)=>Math.abs(b.y-a.y)>3.5?b.y-a.y:a.x-b.x);
+    const rows=[];
+    for(const item of items){let row=rows.find(r=>Math.abs(r.y-item.y)<=3.5);if(!row)rows.push(row={y:item.y,items:[]});row.items.push(item);}
+    lines=rows.sort((a,b)=>b.y-a.y).map(r=>r.items.sort((a,b)=>a.x-b.x).map(x=>x.text).join('  |  '));
+   }
+   let pageText=lines.join('\n');
+   if(pageText.replace(/\s/g,'').length<18){
+    if(!window.Tesseract)await qbookLoadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js');
+    const worker=await window.Tesseract.createWorker('rus+eng');
+    try{
+     const viewport=page.getViewport({scale:2}),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+     canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
+     await page.render({canvasContext:ctx,viewport}).promise;
+     const result=await worker.recognize(canvas);pageText=result.data.text||'';
+    }finally{await worker.terminate();}
+   }
+   pages.push(pageText);
+  }
+  const text=pages.join('\n\n');
+  if(!text.trim())throw new Error('Не удалось извлечь текст из PDF. Возможно, документ защищён или изображение имеет слишком низкое качество.');
+  return text;
  }
  throw new Error('Формат файла не поддерживается');
 }
@@ -396,20 +422,35 @@ function qbookParseImport(raw,ext){
 function qbookParseLines(text){
  const lines=text.split('\n').map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean);
  const weeks=[];let week=null,day=null,exercises=[];
- const weekRx=/^(?:недел[яи]\s*\d+|week\s*\d+)/i,dayRx=/^(?:(?:тренировк[аи]|заняти[ея]|день)\s*\d+|day\s*\d+)/i;
- const ignore=/^(?:программа|план тренировок|разминка|заминка|отдых между|примечание|инструкция|неделя|week)\b/i;
- for(const line of lines){
+ const weekRx=/^(?:недел[яи]\s*(?:№\s*)?\d+|week\s*(?:no\.?\s*)?\d+|микроцикл\s*\d+)/i;
+ const dayRx=/^(?:(?:тренировк[аи]|заняти[ея]|день)\s*(?:№\s*)?\d+|day\s*\d+|workout\s*\d+|(?:понедельник|вторник|среда|четверг|пятница|суббота|воскресенье)\b)/i;
+ const ignore=/^(?:программа|план тренировок|разминка|заминка|отдых между|примечание|инструкция|неделя|week|упражнение|exercise|название|подходы|повторения|reps|sets|нагрузка|вес|weight|темп|комментарий|итого)\b/i;
+ const startDay=(name)=>{if(!week){week={name:'Неделя 1',days:[]};weeks.push(week);}day={name,exercises:[]};week.days.push(day);};
+ for(const original of lines){
+  const line=original.replace(/\s*\|\s*/g,' | ').trim();
   if(weekRx.test(line)){week={name:line,days:[]};weeks.push(week);day=null;continue;}
-  if(dayRx.test(line)){if(!week){week={name:'Неделя 1',days:[]};weeks.push(week);}day={name:line,exercises:[]};week.days.push(day);continue;}
-  if(ignore.test(line)||line.length<3)continue;
-  let m=line.match(/^(?:[-•*]|\d+[.)])\s*(.+)$/);let body=(m?m[1]:line).trim();
-  let setMatch=body.match(/(?:\s|^)(\d{1,2})\s*[xх×]\s*(\d{1,3}(?:[-–]\d{1,3})?)(?:\s*(?:повт\.?|reps?))?/i);
-  let name=body.replace(/[,;:]?\s*\d{1,2}\s*[xх×]\s*\d{1,3}(?:[-–]\d{1,3})?.*$/i,'').trim();
-  if(!name||name.length>110)continue;
-  let ex={name,description:'',categories:[],equipment:[],sets:setMatch?Number(setMatch[1]):3,reps:setMatch?setMatch[2]:'8–12',rest:120};
+  if(dayRx.test(line)){startDay(line);continue;}
+  if(ignore.test(line)||line.length<3||/^[-_=|•·\s]+$/.test(line))continue;
+  let body=line.replace(/^(?:[-•*]|\d+[.)])\s*/,'').trim();
+  const setMatch=body.match(/(?:^|\D)(\d{1,2})\s*[xх×]\s*(\d{1,3}(?:[-–]\d{1,3})?)(?:\s*(?:повт\.?|reps?)\b)?/i)||body.match(/(\d{1,2})\s*(?:подхода?|sets?)\s*(?:по|of)?\s*(\d{1,3}(?:[-–]\d{1,3})?)/i);
+  const weightMatch=body.match(/(?:вес|нагрузка|weight)\s*[:=]?\s*(\d+(?:[.,]\d+)?)\s*(кг|kg|lb)?/i);
+  const restMatch=body.match(/(?:отдых|rest|пауза)\s*[:=]?\s*(\d{1,3})\s*(?:сек|s|sec|мин|min)?/i);
+  const explicitSets=body.match(/(?:подходы|sets)\s*[:=]?\s*(\d{1,2})/i);
+  const explicitReps=body.match(/(?:повторения|повторы|reps)\s*[:=]?\s*(\d{1,3}(?:[-–]\d{1,3})?)/i);
+  let name=body
+   .replace(/(?:подходы|sets)\s*[:=]?\s*\d{1,2}/ig,'')
+   .replace(/(?:повторения|повторы|reps)\s*[:=]?\s*\d{1,3}(?:[-–]\d{1,3})?/ig,'')
+   .replace(/(?:вес|нагрузка|weight)\s*[:=]?\s*\d+(?:[.,]\d+)?\s*(?:кг|kg|lb)?/ig,'')
+   .replace(/(?:отдых|rest|пауза)\s*[:=]?\s*\d{1,3}\s*(?:сек|s|sec|мин|min)?/ig,'')
+   .replace(/[,;|]+\s*$/,'').trim();
+  if(setMatch)name=name.replace(/[,;|]?\s*\d{1,2}\s*[xх×]\s*\d{1,3}(?:[-–]\d{1,3})?.*$/i,'').trim();
+  if(!name||name.length>140||ignore.test(name))continue;
+  const ex={name,description:'',categories:[],equipment:[],sets:Number(explicitSets?.[1]||setMatch?.[1]||3),reps:String(explicitReps?.[1]||setMatch?.[2]||'8–12'),rest:Number(restMatch?.[1]||120)};
+  if(weightMatch)ex.weight=weightMatch[1]+(weightMatch[2]?' '+weightMatch[2]:'');
   if(day)day.exercises.push(ex);else exercises.push(ex);
  }
- if(weeks.length){if(!weeks.some(w=>w.days.length))weeks[0].days.push({name:'День 1',exercises});return {exercises:[],program:{name:'Импортированная программа',weeks}};}
+ const usefulWeeks=weeks.filter(w=>w.days.some(d=>d.exercises.length));
+ if(usefulWeeks.length)return {exercises,program:{name:'Импортированная программа',weeks:usefulWeeks}};
  return {exercises,program:null};
 }
 function qbookNormalizeExercise(x){
