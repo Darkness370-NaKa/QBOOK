@@ -277,7 +277,8 @@ footer{max-width:720px;margin:30px auto 0;letter-spacing:.02em}
  setTimeout(async function(){
   const status=document.getElementById('connection'),root=document.getElementById('library');
   if(!status||!root)return;
-  if(status.textContent!=='Загружаем библиотеку'&&status.textContent!=='Загружаем библиотеку…'&&root.children.length)return;
+  // If the main loader has already rendered shared exercises, do not duplicate the request.
+  if(root.querySelector('[data-pick]'))return;
   try{
    const response=await fetch(endpoint,{method:'GET',headers:{apikey:apiKey,Authorization:'Bearer '+apiKey,Accept:'application/json'},cache:'no-store'});
    if(!response.ok)throw new Error('HTTP '+response.status);
@@ -291,7 +292,7 @@ footer{max-width:720px;margin:30px auto 0;letter-spacing:.02em}
    if(count)count.textContent='Ошибка загрузки: '+String(error&&error.message||error);
    console.error('QBOOK emergency bootstrap:',error);
   }
- },15000);
+ },0);
 })();
 </script>
 <script>
