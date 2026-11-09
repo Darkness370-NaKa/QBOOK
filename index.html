@@ -220,9 +220,9 @@ footer{max-width:720px;margin:30px auto 0;letter-spacing:.02em}
 /* QBOOK full-screen welcome intro — blocks interaction until reveal completes */
 .welcome-screen{position:fixed!important;inset:0!important;top:0!important;right:0!important;bottom:0!important;left:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-width:100vw;min-height:100vh;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:24px;padding-top:calc(24px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));background:rgba(3,7,4,.52);backdrop-filter:blur(20px) brightness(.42) saturate(.65);-webkit-backdrop-filter:blur(20px) brightness(.42) saturate(.65);opacity:1;visibility:visible;pointer-events:auto;touch-action:none;transition:opacity 900ms cubic-bezier(.2,.75,.25,1),backdrop-filter 900ms ease,-webkit-backdrop-filter 900ms ease,visibility 0s linear 900ms}
 .welcome-screen.is-leaving{opacity:0;visibility:hidden;pointer-events:none;backdrop-filter:blur(0px) brightness(1) saturate(1);-webkit-backdrop-filter:blur(0px) brightness(1) saturate(1)}
-.welcome-card{width:min(460px,100%);position:relative;overflow:hidden;display:flex;align-items:center;gap:17px;padding:25px 25px 28px;border:1px solid #6b8748;border-radius:22px;background:radial-gradient(circle at 100% 0,#c8ff5524,transparent 48%),linear-gradient(145deg,#1d2b1e,#0e1510);box-shadow:0 28px 100px #000c,0 0 55px #c8ff5514;transform:translateY(18px) scale(.94);opacity:0;animation:welcome-card-in 850ms cubic-bezier(.16,.85,.25,1) 180ms forwards}
+.welcome-card{width:min(460px,100%);position:relative;overflow:hidden;display:flex;align-items:center;gap:17px;padding:25px 25px 28px;border:1px solid #6b8748;border-radius:22px;background:radial-gradient(circle at 100% 0,#c8ff5524,transparent 48%),linear-gradient(145deg,#1d2b1e,#0e1510);box-shadow:0 28px 100px #000c,0 0 55px #c8ff5514;transform:none;opacity:1;animation:none}
 .welcome-card:after{content:"Q";position:absolute;right:12px;bottom:-58px;font-size:190px;font-weight:950;line-height:1;color:#d9ff9b0a;pointer-events:none}
-.welcome-screen.is-leaving .welcome-card{transform:translateY(-8px) scale(.98);opacity:0;transition:opacity 500ms ease,transform 650ms ease}
+.welcome-screen.is-leaving .welcome-card{transform:translateY(-4px);opacity:0;transition:opacity 350ms ease,transform 350ms ease}
 .welcome-card-mark{width:58px;height:58px;flex:none;display:grid;place-items:center;border-radius:17px;background:linear-gradient(145deg,#e0ff9b,var(--lime));color:#10170d;font-size:34px;font-weight:950;box-shadow:0 0 34px #c8ff5545}
 .welcome-card-copy{position:relative;z-index:1;min-width:0}
 .welcome-kicker{font-size:9px;font-weight:850;letter-spacing:.19em;color:var(--lime);margin-bottom:8px}
@@ -306,9 +306,11 @@ const hasSeenWelcome=localStorage.getItem(WELCOME_KEY)==='1';
  if(hasSeenWelcome){el('welcome-kicker').textContent='QBOOK · РАДЫ ВИДЕТЬ СНОВА';el('welcome-title').textContent='С возвращением!';el('welcome-text').textContent='Продолжай двигаться к своей цели. Твоя следующая тренировка начинается здесь.';}
  else{localStorage.setItem(WELCOME_KEY,'1');}
  const welcomeScreen=el('welcome-screen');
+ const appShell=document.querySelector('.wrap');
+ if(appShell){appShell.style.transition='filter 350ms ease';appShell.style.filter='blur(10px) brightness(.42)';}
  document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
- const finishWelcome=()=>{welcomeScreen.classList.add('is-leaving');setTimeout(()=>{welcomeScreen.remove();document.documentElement.style.overflow='';document.body.style.overflow='';},950)};
- setTimeout(finishWelcome,3500);
+ const finishWelcome=()=>{welcomeScreen.classList.add('is-leaving');if(appShell)appShell.style.filter='none';setTimeout(()=>{welcomeScreen.remove();document.documentElement.style.overflow='';document.body.style.overflow='';},420)};
+ setTimeout(finishWelcome,2100);
  if(tg&&tg.isExpanded===false){try{tg.expand()}catch(e){}}renderGroups();renderGear();renderPlan();renderHistory();renderLibrary();load();
 })();
 </script></body></html>
