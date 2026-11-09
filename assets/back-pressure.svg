@@ -1,1 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 300" role="img" aria-labelledby="t d"><title id="t">Back pressure</title><desc id="d">Тяни рукоять к корпусу</desc><rect width="520" height="300" rx="22" fill="#f4f7f2"/><path d="M26 250H494" stroke="#d7e0d6" stroke-width="3"/><rect x="44" y="224" width="145" height="18" rx="8" fill="#d6ded4"/><rect x="76" y="203" width="80" height="22" rx="8" fill="#b7c5b5"/><path d="M142 203 C180 178 222 160 270 158 L350 158 Q375 158 385 140 L407 103 Q415 88 429 96 Q441 104 434 119 L418 160 Q407 190 377 204 L300 232 Q235 250 175 238Z" fill="#e8b994" stroke="#785b4a" stroke-width="4" stroke-linejoin="round"/><path d="M352 158 Q380 151 397 129" fill="none" stroke="#785b4a" stroke-width="3"/><path d="M420 185 C370 180 330 180 270 180" fill="none" stroke="#e13d35" stroke-width="10" stroke-linecap="round"/><path d="M300 155 L270 180 L300 205" fill="none" stroke="#e13d35" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="142" cy="203" r="7" fill="#315c42"/><text x="28" y="42" font-family="Arial,sans-serif" font-size="25" font-weight="700" fill="#173d2a">Back pressure</text><text x="28" y="72" font-family="Arial,sans-serif" font-size="15" fill="#526456">Тяни рукоять к корпусу</text><text x="28" y="280" font-family="Arial,sans-serif" font-size="12" fill="#647568">СХЕМА ДВИЖЕНИЯ · QBOOK</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+<title id="title">Back pressure</title><desc id="desc">Тяни кисть и рукоять к себе</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#202b24"/><stop offset="1" stop-color="#101713"/></linearGradient>
+ <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0c6a0"/><stop offset=".55" stop-color="#d99e78"/><stop offset="1" stop-color="#a96e53"/></linearGradient>
+ <linearGradient id="edge" x2="0" y2="1"><stop stop-color="#f6d5b7"/><stop offset="1" stop-color="#bd8061"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+ <marker id="tip" markerWidth="9" markerHeight="9" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#c8ff55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<rect width="640" height="360" rx="26" fill="url(#bg)"/>
+<circle cx="515" cy="70" r="130" fill="#c8ff55" opacity=".055"/>
+<path d="M28 286H612" stroke="#536157" opacity=".35"/>
+<text x="36" y="48" fill="#c8ff55" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="2.2">QBOOK  /  ТЕХНИКА ДВИЖЕНИЯ</text>
+<text x="36" y="91" fill="#f2f5ef" font-family="Arial,sans-serif" font-size="29" font-weight="700">Back pressure</text>
+<text x="36" y="119" fill="#aab7ac" font-family="Arial,sans-serif" font-size="15">Тяни кисть и рукоять к себе</text>
+<ellipse cx="328" cy="252" rx="210" ry="22" fill="#000" opacity=".32" filter="url(#shadow)"/>
+<path d="M128 240 C168 219 204 195 247 183 L356 152 Q378 146 390 125 L420 83 Q431 67 447 76 Q461 85 452 102 L429 153 Q414 188 382 204 L280 245 Q205 274 145 264Z" fill="url(#skin)" stroke="#f4c7a6" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M146 241 C205 220 246 202 291 190" fill="none" stroke="url(#edge)" stroke-width="8" opacity=".65" stroke-linecap="round"/>
+<path d="M354 153 Q384 147 403 119" fill="none" stroke="#9a604a" stroke-width="3" opacity=".75"/>
+<path d="M419 88 Q430 71 446 80" fill="none" stroke="#ffe0c2" stroke-width="3" opacity=".8" stroke-linecap="round"/>
+<path d="M425 174 C375 160 330 157 265 165" fill="none" stroke="#c8ff55" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#tip)"/>
+<circle cx="128" cy="240" r="8" fill="#c8ff55"/><circle cx="128" cy="240" r="16" fill="none" stroke="#c8ff55" opacity=".28" stroke-width="2"/>
+<rect x="36" y="310" width="568" height="1" fill="#536157" opacity=".45"/>
+<text x="36" y="337" fill="#7f9082" font-family="Arial,sans-serif" font-size="11" letter-spacing="1.4">КОНТРОЛИРУЙ ДВИЖЕНИЕ • НЕ ТЕРЯЙ ПОЛОЖЕНИЕ КИСТИ</text>
+</svg>
