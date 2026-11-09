@@ -14,10 +14,16 @@
 <text x="36" y="91" fill="#f2f5ef" font-family="Arial,sans-serif" font-size="29" font-weight="700">Rising</text>
 <text x="36" y="119" fill="#aab7ac" font-family="Arial,sans-serif" font-size="15">Подними сторону большого пальца</text>
 <ellipse cx="328" cy="252" rx="210" ry="22" fill="#000" opacity=".32" filter="url(#shadow)"/>
-<path d="M128 240 C168 219 204 195 247 183 L356 152 Q378 146 390 125 L420 83 Q431 67 447 76 Q461 85 452 102 L429 153 Q414 188 382 204 L280 245 Q205 274 145 264Z" fill="url(#skin)" stroke="#f4c7a6" stroke-width="3.5" stroke-linejoin="round"/>
-<path d="M146 241 C205 220 246 202 291 190" fill="none" stroke="url(#edge)" stroke-width="8" opacity=".65" stroke-linecap="round"/>
-<path d="M354 153 Q384 147 403 119" fill="none" stroke="#9a604a" stroke-width="3" opacity=".75"/>
-<path d="M419 88 Q430 71 446 80" fill="none" stroke="#ffe0c2" stroke-width="3" opacity=".8" stroke-linecap="round"/>
+<path d="M119 245 C153 222 197 202 245 186 C282 174 322 160 351 148 C365 142 369 132 375 116 L389 88 C395 76 406 70 416 76 L430 84 L443 77 C453 73 463 80 464 90 C465 98 458 105 450 111 L463 113 C474 117 475 129 465 137 L444 153 C432 169 414 184 392 197 C377 207 359 215 337 222 L267 247 C211 267 161 275 128 262 C119 258 114 251 119 245Z" fill="url(#skin)" stroke="#f4c7a6" stroke-width="3.2" stroke-linejoin="round"/>
+<path d="M145 239 C184 216 224 200 267 186 C296 177 323 166 347 158 C339 174 318 188 292 198 C247 216 206 235 166 251Z" fill="#a85f4b" opacity=".24"/>
+<path d="M165 235 C205 214 244 199 280 189 C306 182 326 171 345 161" fill="none" stroke="#f8d4b6" stroke-width="5" opacity=".6" stroke-linecap="round"/>
+<path d="M180 249 C221 230 258 216 294 205 C318 198 340 186 359 174" fill="none" stroke="#9b5d49" stroke-width="2.4" opacity=".48" stroke-linecap="round"/>
+<path d="M224 205 C240 196 258 190 278 184 C296 179 313 171 326 164" fill="none" stroke="#f5c29d" stroke-width="2.5" opacity=".8" stroke-linecap="round"/>
+<path d="M351 148 C366 145 377 137 382 123" fill="none" stroke="#9b5d49" stroke-width="3" opacity=".7" stroke-linecap="round"/>
+<path d="M389 88 C397 77 407 74 416 80 M430 84 C439 79 449 81 453 89 M450 111 C458 107 466 113 465 121 M442 153 C433 161 424 169 415 174" fill="none" stroke="#8e5544" stroke-width="2.3" opacity=".58" stroke-linecap="round"/>
+<path d="M393 92 C398 83 407 80 414 84" fill="none" stroke="#ffe0c2" stroke-width="3" opacity=".75" stroke-linecap="round"/>
+<path d="M424 143 C431 135 439 129 448 125" fill="none" stroke="#f5c29d" stroke-width="2.5" opacity=".72" stroke-linecap="round"/>
+<path d="M368 158 Q378 166 389 168" fill="none" stroke="#8e5544" stroke-width="2" opacity=".45" stroke-linecap="round"/>
 <path d="M300 190 C350 170 382 132 395 90" fill="none" stroke="#c8ff55" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#tip)"/>
 <circle cx="128" cy="240" r="8" fill="#c8ff55"/><circle cx="128" cy="240" r="16" fill="none" stroke="#c8ff55" opacity=".28" stroke-width="2"/>
 <rect x="36" y="310" width="568" height="1" fill="#536157" opacity=".45"/>
