@@ -217,18 +217,27 @@ footer{max-width:720px;margin:30px auto 0;letter-spacing:.02em}
 }
 \n
 /* QBOOK animated welcome toast — local-only */
-.welcome-toast{position:fixed;z-index:1000;top:calc(env(safe-area-inset-top,0px) + 16px);left:50%;width:min(540px,calc(100% - 28px));display:flex;align-items:center;gap:13px;padding:15px 18px 17px;border:1px solid #526b3b;border-radius:17px;background:linear-gradient(115deg,rgba(36,51,31,.97),rgba(17,23,18,.98));box-shadow:0 18px 55px #0009;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);opacity:0;transform:translate(-50%,-24px) scale(.97);pointer-events:none;overflow:hidden;animation:welcome-pop 700ms cubic-bezier(.2,.8,.2,1) 180ms forwards,welcome-away 650ms ease-in 4.7s forwards}
-.welcome-toast-mark{width:42px;height:42px;flex:none;display:grid;place-items:center;border-radius:12px;background:var(--lime);color:#101411;font-size:25px;font-weight:950;box-shadow:0 0 24px #c8ff5540}
-.welcome-toast-copy{min-width:0}.welcome-kicker{font-size:8px;font-weight:850;letter-spacing:.18em;color:var(--lime);margin-bottom:5px}.welcome-title{font-size:16px;font-weight:850;letter-spacing:-.035em;color:#f4f7ef}.welcome-text{font-size:10px;line-height:1.45;color:#c1cbbd;margin-top:3px}
-.welcome-toast-line{position:absolute;bottom:0;left:0;height:2px;width:100%;background:var(--lime);transform-origin:left;animation:welcome-progress 4.5s linear 900ms forwards}
-@keyframes welcome-pop{to{opacity:1;transform:translate(-50%,0) scale(1)}}@keyframes welcome-away{to{opacity:0;transform:translate(-50%,-14px) scale(.98);visibility:hidden}}@keyframes welcome-progress{to{transform:scaleX(0)}}
-@media(max-width:520px){.welcome-toast{top:calc(env(safe-area-inset-top,0px) + 10px);padding:13px 14px}.welcome-toast-mark{width:38px;height:38px}.welcome-title{font-size:14px}.welcome-text{font-size:9px}}
-@media(prefers-reduced-motion:reduce){.welcome-toast{animation:none;opacity:1;transform:translate(-50%,0)}.welcome-toast-line{animation:none;transform:scaleX(0)}}
+/* QBOOK full-screen welcome intro — blocks interaction until reveal completes */
+.welcome-screen{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;padding-top:calc(24px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));background:rgba(3,7,4,.48);backdrop-filter:blur(15px) brightness(.48) saturate(.72);-webkit-backdrop-filter:blur(15px) brightness(.48) saturate(.72);opacity:1;visibility:visible;pointer-events:auto;touch-action:none;transition:opacity 900ms cubic-bezier(.2,.75,.25,1),backdrop-filter 900ms ease,-webkit-backdrop-filter 900ms ease,visibility 0s linear 900ms}
+.welcome-screen.is-leaving{opacity:0;visibility:hidden;pointer-events:none;backdrop-filter:blur(0) brightness(1) saturate(1);-webkit-backdrop-filter:blur(0) brightness(1) saturate(1)}
+.welcome-card{width:min(460px,100%);position:relative;overflow:hidden;display:flex;align-items:center;gap:17px;padding:25px 25px 28px;border:1px solid #6b8748;border-radius:22px;background:radial-gradient(circle at 100% 0,#c8ff5524,transparent 48%),linear-gradient(145deg,#1d2b1e,#0e1510);box-shadow:0 28px 100px #000c,0 0 55px #c8ff5514;transform:translateY(18px) scale(.94);opacity:0;animation:welcome-card-in 850ms cubic-bezier(.16,.85,.25,1) 180ms forwards}
+.welcome-card:after{content:"Q";position:absolute;right:12px;bottom:-58px;font-size:190px;font-weight:950;line-height:1;color:#d9ff9b0a;pointer-events:none}
+.welcome-screen.is-leaving .welcome-card{transform:translateY(-8px) scale(.98);opacity:0;transition:opacity 500ms ease,transform 650ms ease}
+.welcome-card-mark{width:58px;height:58px;flex:none;display:grid;place-items:center;border-radius:17px;background:linear-gradient(145deg,#e0ff9b,var(--lime));color:#10170d;font-size:34px;font-weight:950;box-shadow:0 0 34px #c8ff5545}
+.welcome-card-copy{position:relative;z-index:1;min-width:0}
+.welcome-kicker{font-size:9px;font-weight:850;letter-spacing:.19em;color:var(--lime);margin-bottom:8px}
+.welcome-title{font-size:clamp(19px,4vw,25px);font-weight:900;letter-spacing:-.045em;line-height:1.12;color:#f4f7ef}
+.welcome-text{font-size:11px;line-height:1.55;color:#c1cbbd;margin-top:7px}
+.welcome-loading{position:absolute;left:0;right:0;bottom:0;height:3px;background:#ffffff12;overflow:hidden}
+.welcome-loading:after{content:"";display:block;width:100%;height:100%;background:var(--lime);transform:scaleX(0);transform-origin:left;animation:welcome-loading 3.4s cubic-bezier(.35,0,.25,1) forwards}
+@keyframes welcome-card-in{to{opacity:1;transform:translateY(0) scale(1)}}@keyframes welcome-loading{to{transform:scaleX(1)}}
+@media(max-width:520px){.welcome-screen{padding-left:20px;padding-right:20px}.welcome-card{gap:13px;padding:20px 17px 23px;border-radius:19px}.welcome-card-mark{width:48px;height:48px;border-radius:14px;font-size:29px}.welcome-kicker{font-size:8px}.welcome-title{font-size:20px}.welcome-text{font-size:10px}.welcome-card:after{font-size:150px;bottom:-45px}}
+@media(prefers-reduced-motion:reduce){.welcome-card{animation:none;opacity:1;transform:none}.welcome-loading:after{animation-duration:1.2s}.welcome-screen,.welcome-screen.is-leaving{transition-duration:200ms}.welcome-screen.is-leaving .welcome-card{transition-duration:150ms}}
 </style></head>
 <body><div class="wrap">
 <header class="top"><div class="brand"><div class="mark">Q</div><div><b>QBOOK</b><div class="sub">ARMWRESTLING TRAINING</div></div></div><div class="status"><i class="dot"></i><span id="connection">Загружаем библиотеку</span></div></header>
 <section class="hero"><div class="hero-main"><div class="eyebrow">TRAIN SMART · PULL STRONG</div><h1>Твоя сила.<br>Твоя система.</h1><p>Собирай тренировки под армрестлинг, управляй нагрузкой и отслеживай прогресс. Без аккаунта и регистрации.</p></div><div class="stat"><span>ЗАВЕРШЕНО ТРЕНИРОВОК</span><strong id="total">0</strong><div class="muted" id="last">История будет храниться на этом устройстве.</div></div></section>
-<div class="welcome-toast" id="welcome-toast" role="status" aria-live="polite"><div class="welcome-toast-mark">Q</div><div class="welcome-toast-copy"><div class="welcome-kicker" id="welcome-kicker">QBOOK · ТВОЯ ТРЕНИРОВОЧНАЯ СИСТЕМА</div><div class="welcome-title" id="welcome-title">Добро пожаловать в QBOOK!</div><div class="welcome-text" id="welcome-text">Тренируйся системно. Становись сильнее. Без регистрации.</div></div><div class="welcome-toast-line"></div></div>
+<div class="welcome-screen" id="welcome-screen" role="dialog" aria-modal="true" aria-label="Приветствие QBOOK"><div class="welcome-card" role="status" aria-live="polite"><div class="welcome-card-mark">Q</div><div class="welcome-card-copy"><div class="welcome-kicker" id="welcome-kicker">QBOOK · ТВОЯ ТРЕНИРОВОЧНАЯ СИСТЕМА</div><div class="welcome-title" id="welcome-title">Добро пожаловать в QBOOK!</div><div class="welcome-text" id="welcome-text">Тренируйся системно. Становись сильнее. Без регистрации.</div></div><div class="welcome-loading"></div></div></div>
 <div class="layout"><main>
 <section class="panel"><div class="head"><div><b>Собери тренировку</b><div class="hint">Выбери направления для сегодняшней работы</div></div><span class="step">01 / 03</span></div><div class="groups" id="groups"></div></section>
 <section class="panel"><div class="head"><div><b>Параметры</b><div class="hint">Уровень, время и интенсивность</div></div><span class="step">02 / 03</span></div><div class="fields"><div class="field"><label>УРОВЕНЬ</label><select id="level"><option>Начальный</option><option selected>Средний</option><option>Продвинутый</option></select></div><div class="field"><label>ВРЕМЯ</label><select id="duration"><option>30</option><option selected>45</option><option>60</option><option>75</option></select></div><div class="field"><label>ИНТЕНСИВНОСТЬ</label><select id="intensity"><option value="easy">Лёгкая</option><option value="normal" selected>Средняя</option><option value="hard">Высокая</option></select></div></div><div class="hint" style="margin:16px 0 8px">ОБОРУДОВАНИЕ</div><div class="chips" id="gear"></div><button class="btn primary full" id="generate">Сгенерировать тренировку ↗</button></section>
@@ -293,8 +302,12 @@ el('modal').addEventListener('click',e=>{let b=e.target.closest('[data-newgroup]
 async function load(){if(!db){el('connection').textContent='Локальный режим';renderLibrary();return}try{let r=await db.from('arm_exercises').select('*').order('name').range(0,999);if(r.error)throw r.error;catalog=r.data||[];el('connection').textContent='Общая библиотека онлайн'}catch(e){catalog=[];el('connection').textContent='Ошибка загрузки библиотеки';console.warn(e.message)}renderLibrary()}
 restore();
 const hasSeenWelcome=localStorage.getItem(WELCOME_KEY)==='1';
-if(hasSeenWelcome){el('welcome-kicker').textContent='QBOOK · РАДЫ ВИДЕТЬ СНОВА';el('welcome-title').textContent='С возвращением!';el('welcome-text').textContent='Продолжай двигаться к своей цели. Твоя следующая тренировка начинается здесь.';}
-else{localStorage.setItem(WELCOME_KEY,'1');}
-if(tg&&tg.isExpanded===false){try{tg.expand()}catch(e){}}renderGroups();renderGear();renderPlan();renderHistory();renderLibrary();load();
+ if(hasSeenWelcome){el('welcome-kicker').textContent='QBOOK · РАДЫ ВИДЕТЬ СНОВА';el('welcome-title').textContent='С возвращением!';el('welcome-text').textContent='Продолжай двигаться к своей цели. Твоя следующая тренировка начинается здесь.';}
+ else{localStorage.setItem(WELCOME_KEY,'1');}
+ const welcomeScreen=el('welcome-screen');
+ document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
+ const finishWelcome=()=>{welcomeScreen.classList.add('is-leaving');setTimeout(()=>{welcomeScreen.remove();document.documentElement.style.overflow='';document.body.style.overflow='';},950)};
+ setTimeout(finishWelcome,3500);
+ if(tg&&tg.isExpanded===false){try{tg.expand()}catch(e){}}renderGroups();renderGear();renderPlan();renderHistory();renderLibrary();load();
 })();
 </script></body></html>
