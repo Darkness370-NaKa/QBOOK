@@ -232,7 +232,7 @@ footer{max-width:720px;margin:30px auto 0;letter-spacing:.02em}
 (function(){
 const tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:null;
 if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#101411');tg.setBackgroundColor('#101411');if(tg.disableVerticalSwipes)tg.disableVerticalSwipes();document.documentElement.classList.add('telegram-app');}catch(e){console.warn('Telegram WebApp init:',e)}}
-const URL='https://iqnyemjfkaarzlhbtfce.supabase.co',KEY='sb_publishable_p8B7IcMmmb6KaDxQhl5NNA_6Sekelb';
+const URL='https://iqnyemjfkaarzlhbtfce.supabase.co',KEY='sb_publishable_p8B7IcMmmb6KaDxQhl5NNA_6Sek3elb';
 const db=window.supabase?window.supabase.createClient(URL,KEY):null;
 const groups=[['wrist','Кисть','Сгибание и стабильность','✊'],['rising','Луч / Rising','Подъём костяшек','↗'],['pronation','Пронация','Вращение внутрь','⤿'],['supination','Супинация','Вращение наружу','⤾'],['cupping','Купирование','Закрытие кисти','◉'],['fingers','Пальцы и хват','Сила удержания','▤'],['biceps','Бицепс','Сгибатели локтя','💪'],['brachialis','Плечевая','Сила угла','⌁'],['triceps','Трицепс','Разгибание','↘'],['side_pressure','Боковое давление','Специфическая сила','◈'],['back_pressure','Тяга на себя','Back pressure','⇠'],['general','Общая подготовка','База и выносливость','◎']];
 const gear=[['dumbbell','Гантели'],['cable','Блок'],['belt','Ремень'],['handle','Рукоять'],['bodyweight','Свой вес'],['bar','Турник'],['roller','Роллер']];
