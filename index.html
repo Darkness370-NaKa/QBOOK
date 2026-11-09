@@ -337,13 +337,13 @@ const hasSeenWelcome=localStorage.getItem(WELCOME_KEY)==='1';
  const appShell=document.querySelector('.wrap');
  if(appShell){appShell.style.transition='filter 250ms ease';appShell.style.filter='blur(9px) brightness(.48)';}
  document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
- localStorage.setItem(WELCOME_KEY,'1');
+ try{localStorage.setItem(WELCOME_KEY,'1')}catch(e){console.warn('QBOOK welcome state:',e)}
  setTimeout(()=>{
    welcomeOverlay.style.transition='opacity 350ms ease';
    welcomeOverlay.style.opacity='0';
    if(appShell)appShell.style.filter='none';
    setTimeout(()=>{welcomeOverlay.remove();document.documentElement.style.overflow='';document.body.style.overflow='';},380);
  },2400);
- if(tg&&tg.isExpanded===false){try{tg.expand()}catch(e){}}renderGroups();renderGear();renderPlan();renderHistory();renderLibrary();load();
+ if(tg&&tg.isExpanded===false){try{tg.expand()}catch(e){}}try{renderGroups()}catch(e){console.warn('QBOOK groups:',e)}try{renderGear()}catch(e){console.warn('QBOOK gear:',e)}try{renderPlan()}catch(e){console.warn('QBOOK plan:',e)}try{renderHistory()}catch(e){console.warn('QBOOK history:',e)}try{renderLibrary()}catch(e){console.warn('QBOOK library render:',e)}load();
 })();
 </script></body></html>
