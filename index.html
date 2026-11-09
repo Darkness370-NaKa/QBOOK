@@ -187,7 +187,35 @@ footer{max-width:720px;margin:30px auto 0;letter-spacing:.02em}
 }
 @media(hover:none){.group:hover,.btn:hover{transform:none}}
 
-</style></head>
+
+\n\n/* QBOOK TYPOGRAPHY & SPACING FIX — readable exercise cards */
+.group{align-items:center;gap:11px;padding:13px}
+.group .ico{flex:0 0 36px}
+.group>span:last-child{display:block;flex:1;min-width:0}
+.gn,.gd{display:block;white-space:normal;overflow-wrap:anywhere}
+.gn{font-size:13px;line-height:1.35;margin-bottom:3px}
+.gd{font-size:10px;line-height:1.45}
+.libitem{align-items:center;gap:12px}
+.libitem>div{min-width:0}
+.libname{font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+.libmeta{font-size:10px;line-height:1.65;overflow-wrap:anywhere}
+.libitem .iconbtn{flex:0 0 auto;white-space:nowrap;padding:8px 10px;min-height:38px}
+.head{gap:14px}
+.head>div{min-width:0}
+.hint{line-height:1.55}
+.exname{line-height:1.45}
+.desc{line-height:1.7}
+@media(max-width:520px){
+ .group{gap:8px;padding:9px;min-height:62px}
+ .group .ico{flex-basis:31px;width:31px;height:31px}
+ .gn{font-size:11px}
+ .gd{font-size:9px;line-height:1.4}
+ .libitem{gap:9px}
+ .libname{font-size:12px}
+ .libmeta{font-size:9px;line-height:1.55}
+ .libitem .iconbtn{font-size:9px;padding:6px 7px;min-height:36px}
+}
+\n</style></head>
 <body><div class="wrap">
 <header class="top"><div class="brand"><div class="mark">Q</div><div><b>QBOOK</b><div class="sub">ARMWRESTLING TRAINING</div></div></div><div class="status"><i class="dot"></i><span id="connection">Загружаем библиотеку</span></div></header>
 <section class="hero"><div class="hero-main"><div class="eyebrow">TRAIN SMART · PULL STRONG</div><h1>Твоя сила.<br>Твоя система.</h1><p>Собирай тренировки под армрестлинг, управляй нагрузкой и отслеживай прогресс. Без аккаунта и регистрации.</p></div><div class="stat"><span>ЗАВЕРШЕНО ТРЕНИРОВОК</span><strong id="total">0</strong><div class="muted" id="last">История будет храниться на этом устройстве.</div></div></section>
