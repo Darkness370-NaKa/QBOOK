@@ -428,7 +428,7 @@ async function qbookHandleImport(file){
  try{
   status.textContent='Читаю документ…';const ext=(file.name.split('.').pop()||'').toLowerCase();const raw=await qbookReadImportFile(file);const parsed=qbookParseImport(raw,ext);
   let exercises=(parsed.exercises||[]).map(qbookNormalizeExercise).filter(Boolean);
-  if(parsed.program){parsed.program.weeks=parsed.program.weeks.map((w,i)=>({name:String(w.name||('Неделя '+(i+1))),days:(w.days||[]).map((d,j)=>({name:String(d.name||('День '+(j+1))),exercises:(d.exercises||[]).map(x=>({...x,name:String(x.name||x.title||'').trim(),sets:Math.max(1,Math.min(10,Number(x.sets)||3)),reps:String(x.reps||'8–12'),rest:Math.max(15,Math.min(600,Number(x.rest)||120)})).filter(x=>x.name)}))}));}
+  if(parsed.program){parsed.program.weeks=parsed.program.weeks.map((w,i)=>({name:String(w.name||('Неделя '+(i+1))),days:(w.days||[]).map((d,j)=>({name:String(d.name||('День '+(j+1))),exercises:(d.exercises||[]).map(x=>({...x,name:String(x.name||x.title||'').trim(),sets:Math.max(1,Math.min(10,Number(x.sets)||3)),reps:String(x.reps||'8–12'),rest:Math.max(15,Math.min(600,Number(x.rest)||120))})).filter(x=>x.name)}))}));}
   if(!exercises.length&&!parsed.program)throw new Error('Не удалось найти упражнения. Проверь формат и структуру документа.');
   const allNames=exercises.map(x=>x.name);const programNames=parsed.program?parsed.program.weeks.flatMap(w=>w.days.flatMap(d=>d.exercises.map(x=>x.name))):[];const total=allNames.length+programNames.length;
   status.textContent='Распознано элементов: '+total;
