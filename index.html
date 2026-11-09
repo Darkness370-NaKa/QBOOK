@@ -251,6 +251,50 @@ footer{max-width:720px;margin:30px auto 0;letter-spacing:.02em}
 <footer>QBOOK · Увеличивай нагрузку постепенно. Если появляется боль в локте, запястье или сухожилиях — остановись и пересмотри нагрузку.</footer></div>
 <div class="modalback" id="back"><div class="modal" id="modal"></div></div><div class="toast" id="toast"></div>
 <script>
+/* QBOOK emergency library bootstrap: independent of the main application script */
+(function(){
+ const endpoint='https://iqnyemjfkaarzlhbtfce.supabase.co/rest/v1/arm_exercises?select=*&order=name&limit=1000';
+ const apiKey='sb_publishable_p8B7IcMmmb6KaDxQhl5NNA_6Sek3elb';
+ const escText=v=>String(v==null?'':v);
+ function showRows(rows){
+  const root=document.getElementById('library'),count=document.getElementById('library-count'),status=document.getElementById('connection');
+  if(!root||!count||!status)return;
+  const fragment=document.createDocumentFragment();
+  rows.forEach(row=>{
+   const item=document.createElement('div');item.className='libitem';
+   const body=document.createElement('div');body.style.cssText='flex:1;min-width:0';
+   const name=document.createElement('div');name.className='libname';name.textContent=escText(row.name);
+   const meta=document.createElement('div');meta.className='libmeta';
+   const cats=Array.isArray(row.categories)?row.categories:[];
+   const equipment=Array.isArray(row.equipment)?row.equipment:[];
+   meta.textContent=cats.join(' · ')+(equipment.length?' — '+equipment.join(', '):'');
+   body.append(name,meta);item.append(body);fragment.append(item);
+  });
+  root.replaceChildren(fragment);
+  count.textContent='Показано '+rows.length+' · всего в библиотеке: '+rows.length;
+  status.textContent='Общая библиотека онлайн';
+ }
+ setTimeout(async function(){
+  const status=document.getElementById('connection'),root=document.getElementById('library');
+  if(!status||!root)return;
+  if(status.textContent!=='Загружаем библиотеку'&&status.textContent!=='Загружаем библиотеку…'&&root.children.length)return;
+  try{
+   const response=await fetch(endpoint,{method:'GET',headers:{apikey:apiKey,Authorization:'Bearer '+apiKey,Accept:'application/json'},cache:'no-store'});
+   if(!response.ok)throw new Error('HTTP '+response.status);
+   const rows=await response.json();
+   if(!Array.isArray(rows)||!rows.length)throw new Error('Пустой ответ');
+   showRows(rows);
+   console.warn('QBOOK emergency bootstrap rendered',rows.length,'exercises');
+  }catch(error){
+   status.textContent='Не удалось загрузить общий каталог';
+   const count=document.getElementById('library-count');
+   if(count)count.textContent='Ошибка загрузки: '+String(error&&error.message||error);
+   console.error('QBOOK emergency bootstrap:',error);
+  }
+ },15000);
+})();
+</script>
+<script>
 (function(){
 const tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:null;
 const WELCOME_KEY='qbook-welcome-seen-v1';
